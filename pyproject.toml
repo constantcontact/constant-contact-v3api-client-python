@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "constant_contact_api_client"
+version = "1.0.0"
+description = "Constant Contact API v3"
+authors = ["Constant Contact Public API <webservices@constantcontact.com>"]
+license = "Private"
+readme = "README.md"
+repository = "https://github.com/constantcontact/constant-contact-v3api-client-python"
+keywords = ["OpenAPI", "OpenAPI-Generator", "Constant Contact API v3"]
+include = ["constant_contact_api_client/py.typed"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+urllib3 = ">= 1.25.3"
+python-dateutil = ">=2.8.2"
+pydantic = ">=2"
+typing-extensions = ">=4.7.1"
+
+[tool.poetry.dev-dependencies]
+pytest = ">=7.2.1"
+tox = ">=3.9.0"
+flake8 = ">=4.0.0"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"

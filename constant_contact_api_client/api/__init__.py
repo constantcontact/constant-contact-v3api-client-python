@@ -1,0 +1,17 @@
+# flake8: noqa
+
+# import apis into api package
+from constant_contact_api_client.api.account_services_api import AccountServicesApi
+from constant_contact_api_client.api.bulk_activities_api import BulkActivitiesApi
+from constant_contact_api_client.api.contact_lists_api import ContactListsApi
+from constant_contact_api_client.api.contact_tags_api import ContactTagsApi
+from constant_contact_api_client.api.contacts_api import ContactsApi
+from constant_contact_api_client.api.contacts_custom_fields_api import ContactsCustomFieldsApi
+from constant_contact_api_client.api.contacts_reporting_api import ContactsReportingApi
+from constant_contact_api_client.api.email_campaigns_api import EmailCampaignsApi
+from constant_contact_api_client.api.email_campaigns_ab_tests_api import EmailCampaignsABTestsApi
+from constant_contact_api_client.api.email_reporting_api import EmailReportingApi
+from constant_contact_api_client.api.email_scheduling_api import EmailSchedulingApi
+from constant_contact_api_client.api.landing_pages_reporting_api import LandingPagesReportingApi
+from constant_contact_api_client.api.segments_api import SegmentsApi
+

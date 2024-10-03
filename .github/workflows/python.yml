@@ -1,0 +1,85 @@
+name: Python Release
+on:
+  push:
+    branches: [ main ]
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
+
+  build:
+    name: Build
+    needs:
+    - validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Build package
+        run: python setup.py sdist
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist
+  release:
+    name: Release
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create tag from commit
+        uses: christophebedard/tag-version-commit@v1
+        id: tag_version
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version_regex: '([0-9]+\.[0-9]+\.[0-9]+)'
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.tag }}
+          name: Release ${{ steps.tag_version.outputs.tag }}
+  publish:
+    name: Publish python distribution
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/constant-contact-v3api
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+           name: sdist
+           path: dist/
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
